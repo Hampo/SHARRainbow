@@ -10,7 +10,10 @@
     <Title>SHAR Rainbow Traffic</Title>
     <Authors>Proddy</Authors>
     <Company>ZHBot</Company>
-    <Description>A tool that makes use of the SHARMemory library to make rainbow traffic cars</Description>
+    <Description>An app that makes use of the SHARMemory library to make rainbow traffic cars</Description>
+    <AssemblyVersion>1.1</AssemblyVersion>
+    <FileVersion>1.1</FileVersion>
+    <Version>1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

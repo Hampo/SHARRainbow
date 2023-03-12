@@ -1,5 +1,7 @@
-﻿using SHARMemory.SHAR.Classes;
+﻿using SHARMemory.SHAR;
+using SHARMemory.SHAR.Classes;
 using SHARMemory.SHAR.Pointers;
+using SHARMemory.SHAR.Structs;
 using System.Diagnostics;
 using System.Drawing;
 
@@ -9,12 +11,12 @@ while (true)
 {
     do
     {
-        p = SHARMemory.SHAR.Memory.GetSHARProcess();
+        p = Memory.GetSHARProcess();
     } while (p == null);
 
     WriteLog("Found SHAR process. Initialising memory manager...", "Main");
 
-    SHARMemory.SHAR.Memory memory = new(p);
+    Memory memory = new(p);
     WriteLog($"SHAR memory manager initialised. Game version detected: {memory.GameVersion}. Language: {memory.GameSubVersion}.", "Main");
     await RunRainbowTraffic(memory);
 
@@ -32,7 +34,40 @@ Color Rainbow(float speed)
     return Color.FromArgb(r, g, b);
 }
 
-async Task RunRainbowTraffic(SHARMemory.SHAR.Memory memory)
+void SetShaderDiffuse(Shader? shader, Color col)
+{
+    if (shader == null)
+        return;
+
+    d3dShader d3dShader = shader.D3DShader;
+    if (d3dShader == null)
+        return;
+
+    d3dShaderInfo shaderInfo = d3dShader.ShaderInfo;
+    shaderInfo.Diffuse = new(col);
+    d3dShader.ShaderInfo = shaderInfo;
+}
+
+void ColourDrawable(Drawable? drawable, Color col)
+{
+    if (drawable == null)
+        return;
+
+    switch (drawable.Type)
+    {
+        case Drawable.Types.Mesh:
+            Mesh mesh = drawable.ReinterpretCast<Mesh>();
+            PointerArray<PrimGroup> primGroups = mesh.PrimGroups;
+            foreach (PrimGroup primGroup in primGroups)
+                SetShaderDiffuse(primGroup?.Shader, col);
+            break;
+        case Drawable.Types.TrafficBodyDrawable:
+            ColourDrawable(drawable.ReinterpretCast<TrafficBodyDrawable>().BodyPropDrawable, col);
+            break;
+    }
+}
+
+async Task RunRainbowTraffic(Memory memory)
 {
     while (!memory.Process.HasExited)
     {
@@ -46,7 +81,22 @@ async Task RunRainbowTraffic(SHARMemory.SHAR.Memory memory)
                 {
                     Color col = Rainbow(4);
                     foreach (Vehicle vehicle in vehicleCentral.ActiveVehicles)
-                        vehicle?.SetTrafficBodyColour(col);
+                    {
+                        vehicle.SetTrafficBodyColour(col);
+
+                        PointerArray<DrawableElement>? elements = vehicle.GeometryVehicle?.CompositeDrawable?.Elements;
+                        if (elements == null)
+                            continue;
+
+                        foreach (DrawableElement element in elements)
+                        {
+                            if (element.Type != DrawableElement.Types.Prop)
+                                continue;
+
+                            DrawablePropElement propElement = element.ReinterpretCast<DrawablePropElement>();
+                            ColourDrawable(propElement.Drawable, col);
+                        }
+                    }
                 }
             }
 
@@ -54,7 +104,7 @@ async Task RunRainbowTraffic(SHARMemory.SHAR.Memory memory)
         }
         catch (Exception ex)
         {
-            HandleError(ex, "RunAllVehiclesJumpBoost");
+            HandleError(ex, "RunRainbowTraffic");
             return;
         }
     }
