@@ -16,7 +16,7 @@ while (true)
 
     SHARMemory.SHAR.Memory memory = new(p);
     WriteLog($"SHAR memory manager initialised. Game version detected: {memory.GameVersion}. Language: {memory.GameSubVersion}.", "Main");
-    await RunAllVehiclesJumpBoost(memory);
+    await RunRainbowTraffic(memory);
 
     memory.Dispose();
     p.Dispose();
@@ -32,7 +32,7 @@ Color Rainbow(float speed)
     return Color.FromArgb(r, g, b);
 }
 
-async Task RunAllVehiclesJumpBoost(SHARMemory.SHAR.Memory memory)
+async Task RunRainbowTraffic(SHARMemory.SHAR.Memory memory)
 {
     while (!memory.Process.HasExited)
     {
