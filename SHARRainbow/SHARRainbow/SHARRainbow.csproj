@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SHARMemory\SHARMemory\SHARMemory.csproj" />
+    <ProjectReference Include="..\..\SHARMemory\SHARMemory\SHARMemory\SHARMemory.csproj" />
   </ItemGroup>
 
 </Project>
