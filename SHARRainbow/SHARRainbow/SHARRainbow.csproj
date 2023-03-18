@@ -6,14 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PlatformTarget>x86</PlatformTarget>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <ApplicationIcon>256x256.ico</ApplicationIcon>
     <Title>SHAR Rainbow</Title>
     <Authors>Proddy</Authors>
     <Company>ZHBot</Company>
     <Description>An app that makes use of the SHARMemory library to make Simpsons: Hit and Run more colourful</Description>
-    <AssemblyVersion>2.0</AssemblyVersion>
-    <FileVersion>2.0</FileVersion>
-    <Version>2.0</Version>
+    <AssemblyVersion>2.1</AssemblyVersion>
+    <FileVersion>2.1</FileVersion>
+    <Version>2.1</Version>
     <PackageProjectUrl>https://github.com/Hampo/SHARRainbow</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Hampo/SHARRainbow.git</RepositoryUrl>
   </PropertyGroup>
@@ -24,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\SHARMemory\SHARMemory\SHARMemory\SHARMemory.csproj" />
+    <ProjectReference Include="..\..\SHARMemory\SHARMemory\SHARMemory.csproj" />
   </ItemGroup>
 
 </Project>

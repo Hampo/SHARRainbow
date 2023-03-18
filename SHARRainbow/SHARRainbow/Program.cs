@@ -68,12 +68,12 @@ void UpdateLights(Memory memory)
     mood.Transition = -1f;
     memory.Singletons.RenderManager.Mood = mood;
 
-    PointerArray<Light>? lights = mood.SunGroup?.Lights;
+    Light[]? lights = mood.SunGroup?.Lights?.ToArray();
     if (lights == null)
         return;
     
     Color col = Rainbow(4);
-    for (uint i = 0; i < lights.Count; i++)
+    for (int i = 0; i < lights.Length; i++)
     {
         Light light = lights[i];
         if (light != null && light is not AmbientLight)
